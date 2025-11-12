@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -25,10 +25,10 @@ const DateField = ({ label, selected, onChange, minDate, maxDate, selectsStart, 
 );
 
 const DateFilter = ({ onFilter }) => {
-  const [start, setStart] = React.useState(null);
-  const [end, setEnd] = React.useState(null);
+  const [start, setStart] = useState(null);
+  const [end, setEnd] = useState(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     onFilter(start, end);
   }, [start, end]);
 

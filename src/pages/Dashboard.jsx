@@ -3,12 +3,14 @@ import SortBar from "../components/SortBar";
 import DateFilter from "../components/DateFilter";
 import FollowerCard from "../components/FollowerCard";
 import twubricData from "../data/twubric.json";
+import ChartView from "../components/ChartView";
 
 const Dashboard = () => {
   const [followers, setFollowers] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [sortField, setSortField] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
+  const [chartMode, setChartMode] = useState(false);
 
   useEffect(() => {
     setFollowers(twubricData);
@@ -61,11 +63,33 @@ const Dashboard = () => {
         <DateFilter onFilter={handleDateFilter} />
       </div>
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filtered.map((f) => (
-          <FollowerCard key={f.uid} data={f} onRemove={handleRemove} />
-        ))}
+      <div className="flex flex-col items-center md:flex-row justify-between mb-4">
+        <h1 className="text-xl font-semibold">
+          {chartMode ? "Twubric Score Chart" : "Follower List"}
+        </h1>
+        <button
+          onClick={() => setChartMode(!chartMode)}
+          className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition"
+        >
+          {chartMode ? "Show Grid View" : "Show Chart View"}
+        </button>
       </div>
+
+      {chartMode ? (
+        <ChartView followers={filtered} />
+      ) : (
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filtered.length > 0 ? (
+            filtered.map((f) => (
+              <FollowerCard key={f.uid} data={f} onRemove={handleRemove} />
+            ))
+          ) : (
+            <p className="text-center text-xl mt-10 col-span-full">
+              No followers found
+            </p>
+          )}
+        </div>
+      )}
     </div>
   );
 };
